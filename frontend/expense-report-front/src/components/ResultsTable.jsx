@@ -1,31 +1,32 @@
 import DataTable from 'react-data-table-component';
+import {Box, Paper} from "@mui/material";
 
-export const ResultsTable = () => {
+export const ResultsTable = (props) => {
+
+
     const columns = [
         {
-            name: 'Title',
-            selector: row => row.title,
+            name: 'Expense Label',
+            selector: row => row.label,
         },
         {
-            name: 'Year',
-            selector: row => row.year,
+            name: 'Expense Type',
+            selector: row => row.type,
         },
+        {
+            name: 'Expense Price',
+            selector: row => row.price
+        }
     ];
 
-    const data = [
-        {
-            id: 1,
-            title: 'Beetlejuice',
-            year: '1988',
-        },
-        {
-            id: 2,
-            title: 'Ghostbusters',
-            year: '1984',
-        },
-    ]
 
     return (
-        <DataTable columns={columns} data={data}/>
+        <Paper>
+            <DataTable
+                title="Expense Results"
+                columns={columns}
+                data={props.data}
+            />
+        </Paper>
     )
 }
