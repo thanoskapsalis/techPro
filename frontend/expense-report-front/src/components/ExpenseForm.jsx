@@ -3,38 +3,46 @@ import {Box, Button, MenuItem, TextField} from "@mui/material";
 export const ExpenseForm = (props) => {
     const options = [
         {
-            value: 'option1',
-            label: 'food',
+            value: 'FOOD',
+            label: 'Food',
         },
         {
-            value: 'option2',
-            label: 'drugs',
+            value: 'TRANSPORT',
+            label: 'Transport',
         },
         {
-            value: 'option3',
-            label: 'subscriptions',
+            value: 'ENTERTAINMENT',
+            label: 'Entertainment',
         },
         {
-            value: 'option4',
-            label: 'savings',
+            value: 'HYGIENE',
+            label: 'Hygiene',
+        },
+        {
+            value: 'OTHER',
+            label: 'Other',
         },
     ];
 
 
     return (
-        <form onSubmit={props.handleSubmit}>
-            <Box sx={{'& > :not(style)': {m: 1}}}>
-                <TextField name={"label"} id="outlined-basic" type={"text"} required={true} label="Expense Label" variant="outlined"/>
-                <TextField name={"type"} id="outlined-select-currency" required={true} select label="Expense Type" defaultValue="option2" helperText="Please select your currency">
-                    {options.map((option) => (
-                        <MenuItem key={option.value} value={option.label}>
-                            {option.label}
-                        </MenuItem>
-                    ))}
-                </TextField>
-                <TextField name={"price"} id="outlined-basic"  required={true} label="Expense Price" type={"number"} variant="outlined"/>
-                <Button variant={"contained"} type={"submit"}>Submit</Button>
-            </Box>
-        </form>
+        <>
+            <h1>Add new Expense</h1>
+            <form onSubmit={props.handleSubmit}>
+                <Box sx={{'& > :not(style)': {m: 1}}}>
+                    <TextField name={"label"} id="outlined-basic" type={"text"} required={true} label="Product" variant="outlined"/>
+                    <TextField name={"type"} id="outlined-select-currency" required={true} select label="Category" defaultValue="option2" helperText="Please select your currency">
+                        {options.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                    <TextField name={"price"} id="outlined-basic"  required={true} label="Cost" type={"number"} variant="outlined"/>
+                    <Button variant={"contained"} type={"submit"}>Submit</Button>
+                </Box>
+            </form>
+        </>
+
     )
 }

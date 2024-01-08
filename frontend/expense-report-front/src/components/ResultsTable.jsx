@@ -6,16 +6,24 @@ export const ResultsTable = (props) => {
 
     const columns = [
         {
-            name: 'Expense Label',
-            selector: row => row.label,
+            name: 'ID',
+            selector: row => row.id,
         },
         {
-            name: 'Expense Type',
-            selector: row => row.type,
+            name: 'Product',
+            selector: row => row.product,
         },
         {
-            name: 'Expense Price',
-            selector: row => row.price
+            name: 'Category',
+            selector: row => row.category,
+        },
+        {
+            name: 'Cost',
+            selector: row => row.cost
+        },
+        {
+            name: "Date",
+            selector: row =>  row.timestamp
         }
     ];
 
@@ -23,7 +31,7 @@ export const ResultsTable = (props) => {
     return (
         <Paper>
             <DataTable
-                title="Expense Results"
+                title="Expenses"
                 columns={columns}
                 data={props.data}
             />
