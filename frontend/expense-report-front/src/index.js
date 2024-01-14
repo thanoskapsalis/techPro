@@ -6,15 +6,18 @@ import reportWebVitals from './reportWebVitals';
 import {BrowserRouter, Route, Router, Routes} from "react-router-dom";
 import {HomePage} from "./pages/HomePage";
 import {Button} from "@mui/material";
-import {SearchPage} from "./pages/SearchPage";
+import {StatsPage} from "./pages/StatsPage";
+import 'resize-observer-polyfill/dist/ResizeObserver.global'
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
     <React.StrictMode>
         <BrowserRouter>
             <Routes>
                 <Route index element={<HomePage/>}/>
-                <Route path={"/search"} element={<SearchPage/>}/>
+                <Route path={"/stats"} element={<StatsPage/>}/>
             </Routes>
         </BrowserRouter>
     </React.StrictMode>

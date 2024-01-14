@@ -6,7 +6,7 @@ export const ResultsTable = (props) => {
 
     const columns = [
         {
-            name: 'ID',
+            name: 'Id',
             selector: row => row.id,
         },
         {
@@ -31,7 +31,7 @@ export const ResultsTable = (props) => {
     return (
         <Paper>
             <DataTable
-                title="Expenses"
+                title="Expense Records"
                 columns={columns}
                 data={props.data}
             />

@@ -11,12 +11,9 @@ export const NavigationBar = () => {
 
     return (
         <Box sx={{flexGrow: 1}}>
-            <AppBar position="static">
+            <AppBar  style={{ "backgroundColor": "#3c8dbc"}} position="static">
                 <Toolbar>
-                    <Button onClick={() => navigateTo("/")}   color="inherit">Home Page</Button>
-                    <Button onClick={() => navigateTo("/search")}   color="inherit">Search</Button>
-                    <Button color="inherit">Statistics</Button>
-                    <Button color="inherit">Pita</Button>
+                    <img src="netcompany.png" alt="logo" style={{"maxWidth": "100px" , "padding": "5px"}}  />
                 </Toolbar>
             </AppBar>
         </Box>

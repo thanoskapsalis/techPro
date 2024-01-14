@@ -26,7 +26,6 @@ function App() {
     return (
         <div className="App">
             <NavigationBar></NavigationBar>
-            <ExpenseForm handleSubmit={handleSubmit}></ExpenseForm>
             <ResultsTable data={data}></ResultsTable>
         </div>
     );
