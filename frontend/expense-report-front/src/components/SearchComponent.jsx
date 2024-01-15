@@ -14,7 +14,8 @@ import {
 import {DateRangePicker} from "@mui/x-date-pickers-pro";
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+import axios from 'axios';
 
 export const SearchComponent = (props) => {
 
@@ -22,6 +23,23 @@ export const SearchComponent = (props) => {
     const [product, setProduct] = useState("")
     const [category, setCategory] = useState("all")
     const [dates, setDates] = useState()
+    const [sliderMinValue, setSliderMinValue] = useState(0)
+    const [sliderMaxValue, setSliderMaxValue] = useState(1000)
+
+
+    useEffect(() => {
+        setSliderMinAndMaxValues()
+    }, [props.data])
+
+    const setSliderMinAndMaxValues = () => {
+        axios.get("http://localhost:8080/api/statistics").then((response) => {
+            const minValue = response.data.min.cost;
+            const maxValue = response.data.max.cost;
+
+            setSliderMinValue(minValue)
+            setSliderMaxValue(maxValue)
+        })
+    }
 
     const options = [
         {
@@ -72,7 +90,7 @@ export const SearchComponent = (props) => {
     return (
         <Card square={false} paddingBottom={5}>
             <CardHeader
-                title={"Search Results"}
+                title={"Search Expenses"}
                 subheader={"Search with one ore more filters"}
                 style={{"backgroundColor": "#3c8dbc", "color": "#ffff"}}
             />
@@ -89,7 +107,7 @@ export const SearchComponent = (props) => {
                 </Grid>
                 <Grid item xs={1}>
                     <TextField name={"product"} value={product} onChange={(event) => setProduct(event.target.value)}
-                               placeholder={"Product"}></TextField>
+                               placeholder={"Expense Description"}></TextField>
                 </Grid>
                 <Grid item xs={1}>
                     <FormControl fullWidth>
@@ -109,8 +127,8 @@ export const SearchComponent = (props) => {
                         Cost Range
                     </Typography>
                     <Slider
-                        min={0}
-                        max={3000}
+                        min={sliderMinValue}
+                        max={sliderMaxValue}
                         onChange={(event, newValue) => setSliderValue(newValue)}
                         valueLabelDisplay={"auto"}
                         value={sliderValue}

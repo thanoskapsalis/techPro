@@ -5,11 +5,14 @@ import {ExpenseForm} from "../components/ExpenseForm";
 import {SearchComponent} from "../components/SearchComponent";
 import {Button, Grid} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
+import AnalyticsIcon from '@mui/icons-material/Analytics';
 import {NavigationBar} from "../components/NavigationBar";
+import {useNavigate, useNavigation} from "react-router-dom";
 
 export const HomePage = () => {
 
     const [data, setData] = useState([])
+    const navigation = useNavigate()
     const datasourceUrl = 'http://localhost:8080/api';
     const [showAddNewModal, setShowAddNewModal] = useState(false)
 
@@ -26,12 +29,15 @@ export const HomePage = () => {
 
     const getInitialData = () => {
         axios.get(datasourceUrl + "/expenses").then((response) => {
-            const results = response.data.map(item => ({...item, category: item.category.toLowerCase()}))
+            const results = response.data.map(item => ({
+                ...item,
+                category: item.category.toLowerCase(),
+                label: item.category.charAt(0).toUpperCase() + item.category.slice(1).toLowerCase()
+            }))
             setData(results);
         })
 
     }
-
 
     const handleSearch = (query) => {
         let nonEmptyQuery = {}
@@ -42,10 +48,22 @@ export const HomePage = () => {
         });
 
         const url = datasourceUrl + "/search?" + new URLSearchParams(nonEmptyQuery).toString();
-        console.log(url)
         axios.get(url).then((response) => {
-            const results = response.data.map(item => ({...item, category: item.category.toLowerCase()}))
+            const results = response.data.map(item => ({
+                ...item, category: item.category.toLowerCase(),
+                label: item.category.charAt(0).toUpperCase() + item.category.slice(1).toLowerCase()
+            }))
             setData(results)
+        })
+    }
+
+    const editAction = (record) => {
+        console.log(record)
+    }
+
+    const deleteAction = (record) => {
+        axios.delete(datasourceUrl +"/expenses/" + record.id).then((response) => {
+            getInitialData()
         })
     }
 
@@ -59,21 +77,29 @@ export const HomePage = () => {
         sendDataToDatabase(formData)
         setShowAddNewModal(false)
     }
+
     return (
         <div style={{"backgroundColor": "#F4F5F7"}}>
             <NavigationBar></NavigationBar>
             <div style={{padding: 50, "backgroundColor": "e0dcef"}}>
-                <Grid container justifyContent={"flex-end"} paddingBottom={5}>
-                    <Button variant={"contained"} color={"success"} startIcon={<AddIcon/>}
-                            onClick={() => setShowAddNewModal(true)}>Add a new Expense</Button>
+                <Grid container justifyContent={"flex-end"} spacing={2} paddingBottom={5}>
+                    <Grid item>
+                        <Button variant={"contained"} color={"info"} startIcon={<AnalyticsIcon/>}
+                                onClick={() => navigation("/stats")}>Analytics</Button>
+                    </Grid>
+                    <Grid item>
+                        <Button variant={"contained"} color={"success"} startIcon={<AddIcon/>}
+                                onClick={() => setShowAddNewModal(true)}>Add new Expense</Button>
+                    </Grid>
                 </Grid>
                 <Grid container paddingBottom={5}>
-                    <ExpenseForm isOpen={showAddNewModal} closeModal={() => setShowAddNewModal(false)} handleSubmit={handleSubmit}></ExpenseForm>
+                    <ExpenseForm isOpen={showAddNewModal} closeModal={() => setShowAddNewModal(false)}
+                                 handleSubmit={handleSubmit}></ExpenseForm>
                 </Grid>
                 <Grid conainer paddingBottom={5}>
                     <SearchComponent handleSearch={handleSearch}></SearchComponent>
                 </Grid>
-                <ResultsTable data={data}></ResultsTable>
+                <ResultsTable data={data} editAction={editAction} deleteAction={deleteAction}></ResultsTable>
             </div>
         </div>
 

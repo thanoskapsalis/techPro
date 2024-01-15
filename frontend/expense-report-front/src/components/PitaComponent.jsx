@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {PieChart} from '@mui/x-charts/PieChart';
 
-import {Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
+import {Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis, Label} from "recharts";
 import {Box, Card, CardHeader, Grid, Typography} from "@mui/material";
-import {StatsForm} from "./StatsForm";
 
 export const PitaComponent = (props) => {
 
@@ -11,26 +10,26 @@ export const PitaComponent = (props) => {
         {
 
             name: "transport",
-            value: 0
+            Category: 0
         },
         {
 
             name: "food",
-            value: 0
+            Category: 0
         },
         {
 
             name: "entertainment",
-            value: 0
+            Category: 0
         },
         {
 
             name: "hygiene",
-            value: 0
+            Category: 0
         },
         {
             name: "other",
-            value: 0
+            Category: 0
         }
     ]);
 
@@ -46,7 +45,7 @@ export const PitaComponent = (props) => {
             if (index !== -1) {
                 setBackEndData(prevData => {
                     const newData = [...prevData];
-                    newData[index] = {...newData[index], value: newData[index].value + item.cost};
+                    newData[index] = {...newData[index], Category: newData[index].Category + item.cost};
                     return newData;
                 });
             }
@@ -61,17 +60,35 @@ export const PitaComponent = (props) => {
                 subheader={"See Detailed Information About your expenses"}
                 style={{"backgroundColor": "#3c8dbc", "color": "#ffff"}}
             />
-            <Grid container spacing={2}>
+            <Grid container spacing={2} padding={5}>
                 <Grid item xs={6}>
-                    <div style={{width: "500px", height: "500px"}}>
+                    <div style={{width: "600px", height: "500px"}}>
                         <ResponsiveContainer width="100%" height="86%" key={`lc__${backEndData.length}`}>
-                            <BarChart width={730} height={250} data={backEndData} key={`lc_${backEndData.length}`}>
+                            <BarChart
+                                width={730}
+                                height={250}
+                                data={backEndData.map((item) => ({
+                                    ...item,
+                                    name: item.name.charAt(0).toUpperCase() + item.name.slice(1).toLowerCase()
+                                }))}
+                                key={`lc_${backEndData.length}`}
+                                legendType={"none"}
+                            >
                                 <CartesianGrid strokeDasharray="3 3"/>
-                                <XAxis dataKey="name"/>
-                                <YAxis/>
+                                <XAxis dataKey="name" />
+                                <YAxis>
+                                    <Label
+                                        dx={-20}
+                                        style={{
+                                            textAnchor: "middle",
+                                            fontSize: "100%",
+                                        }}
+                                        angle={270}
+                                        value={"Cost (€)"}/>
+                                </YAxis>
                                 <Tooltip/>
                                 <Legend/>
-                                <Bar dataKey="value" fill="#8884d8"/>
+                                <Bar dataKey="Category" fill="#8884d8"/>
                             </BarChart>
                         </ResponsiveContainer>
 
@@ -79,18 +96,22 @@ export const PitaComponent = (props) => {
                 </Grid>
                 <Grid item xs={6}>
                     <Box flexGrow={1}>
-                        <Typography>PieChart</Typography>
                         <PieChart
+
                             series={[
                                 {
                                     data: backEndData.map(item => {
                                         const {name, ...rest} = item;
-                                        return {...rest, label: name};
+                                        return {
+                                            ...rest,
+                                            value: item.Category,
+                                            label: name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
+                                        };
                                     }),
                                 },
                             ]}
-                            width={400}
-                            height={200}
+                            width={500}
+                            height={300}
                         />
                     </Box>
                 </Grid>

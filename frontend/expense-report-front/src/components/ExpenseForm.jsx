@@ -72,7 +72,7 @@ export const ExpenseForm = (props) => {
                     >
                         <Grid item xs={4}>
                             <TextField name={"label"} id="outlined-basic" type={"text"} required={true}
-                                       label="Product"
+                                       label="Expense Description"
                                        variant="outlined"/>
                         </Grid>
                         <Grid item xs={4}>
