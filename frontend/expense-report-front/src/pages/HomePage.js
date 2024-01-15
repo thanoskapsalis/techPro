@@ -17,6 +17,10 @@ export const HomePage = () => {
     const [showAddNewModal, setShowAddNewModal] = useState(false)
 
 
+    const [showEditModal, setShowEditModal] = useState(false)
+    const [editElement, setEditElement] = useState({})
+
+
     useEffect(() => {
         getInitialData()
     }, []);
@@ -58,11 +62,12 @@ export const HomePage = () => {
     }
 
     const editAction = (record) => {
-        console.log(record)
+        setEditElement(record)
+        setShowEditModal(true)
     }
 
     const deleteAction = (record) => {
-        axios.delete(datasourceUrl +"/expenses/" + record.id).then((response) => {
+        axios.delete(datasourceUrl + "/expenses/" + record.id).then((response) => {
             getInitialData()
         })
     }
@@ -76,6 +81,21 @@ export const HomePage = () => {
         };
         sendDataToDatabase(formData)
         setShowAddNewModal(false)
+    }
+
+    const handleUpdate = (event) => {
+        event.preventDefault();
+        const formData = {
+            product: event.target.label.value,
+            category: event.target.type.value,
+            cost: event.target.price.value,
+            id: editElement.id
+        };
+
+        axios.put(datasourceUrl +"/expenses/" + editElement.id, formData).then((response) => {
+            getInitialData();
+            setShowEditModal(false)
+        })
     }
 
     return (
@@ -93,13 +113,23 @@ export const HomePage = () => {
                     </Grid>
                 </Grid>
                 <Grid container paddingBottom={5}>
-                    <ExpenseForm isOpen={showAddNewModal} closeModal={() => setShowAddNewModal(false)}
-                                 handleSubmit={handleSubmit}></ExpenseForm>
+                    <ExpenseForm isOpen={showAddNewModal}
+                                 closeModal={() => setShowAddNewModal(false)}
+                                 handleSubmit={handleSubmit}
+                                 editMode={false}
+                    />
                 </Grid>
                 <Grid conainer paddingBottom={5}>
                     <SearchComponent handleSearch={handleSearch}></SearchComponent>
                 </Grid>
                 <ResultsTable data={data} editAction={editAction} deleteAction={deleteAction}></ResultsTable>
+                <ExpenseForm
+                    editMode={true}
+                    isOpen={showEditModal}
+                    closeModal={() => setShowEditModal(false)}
+                    editElement={editElement}
+                    handleSubmit={handleUpdate}
+                />
             </div>
         </div>
 

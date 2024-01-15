@@ -12,7 +12,7 @@ import {
     Typography
 } from "@mui/material";
 import Modal from 'react-modal';
-import React from "react";
+import React, {useState} from "react";
 
 
 export const ExpenseForm = (props) => {
@@ -61,7 +61,7 @@ export const ExpenseForm = (props) => {
         >
             <Card>
                 <CardHeader
-                    title={"Add new Expense"}
+                    title={(props.editMode)? "Edit Expense with ID " + props.editElement.id : "Add new expense"}
                     subheader={"Fill the categories"}
                     style={{"backgroundColor": "#3c8dbc", "color": "#ffff"}}
                 />
@@ -73,12 +73,14 @@ export const ExpenseForm = (props) => {
                         <Grid item xs={4}>
                             <TextField name={"label"} id="outlined-basic" type={"text"} required={true}
                                        label="Expense Description"
-                                       variant="outlined"/>
+                                       variant="outlined"
+                                       defaultValue={(props.editMode)? props.editElement["product"] : ""}
+                            />
                         </Grid>
                         <Grid item xs={4}>
                             <FormControl fullWidth>
                                 <Select name={"type"} id="outlined-select-currency" required={true}
-                                        defaultValue={"FOOD"}>
+                                        defaultValue={(props.editMode && typeof props.editElement["category"] != 'undefined')? props.editElement["category"].toUpperCase() : "FOOD"}>
                                     {options.map((option) => (
                                         <MenuItem key={option.value} value={option.value}>
                                             {option.label}
@@ -90,7 +92,9 @@ export const ExpenseForm = (props) => {
                         <Grid item xs={4}>
                             <TextField name={"price"} id="outlined-basic" required={true} label="Cost"
                                        type={"number"}
-                                       variant="outlined"/>
+                                       variant="outlined"
+                                       defaultValue={(props.editMode)? props.editElement["cost"] : ""}
+                            />
                         </Grid>
                     </Grid>
 
